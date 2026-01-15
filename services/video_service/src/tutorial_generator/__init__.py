@@ -21,15 +21,23 @@ def synchronize_video_audio(video_filename, audio_filenames, timestamps, remove_
     final_audio = CompositeAudioClip(audio_clips)
     final_video = video.with_audio(final_audio)
 
-    output_path = video_filename.parent / f"{video_filename.stem}_merged{video_filename.suffix}"
 
-    # Use appropriate audio codec based on video format
-    is_webm = video_filename.suffix.lower() == '.webm'
+    return final_video
+
+
+def trim_video(video, seconds):
+
+    # TODO Trim the first x seconds of the video
+
+    return
+
+
+def save_video(video: VideoFileClip, filename):
+
+    is_webm = filename.suffix.lower() == '.webm'
     audio_codec = "libvorbis" if is_webm else "aac"
 
-    final_video.write_videofile(str(output_path), audio_codec=audio_codec)
-
-    return output_path
+    video.write_videofile(str(filename), audio_codec=audio_codec)
 
 
 def generate_tutorial(name, voice, actions, texts, remove_first_section=False):
@@ -55,15 +63,19 @@ def generate_tutorial(name, voice, actions, texts, remove_first_section=False):
 
     logger.info(f"Generating video file")
 
-    timestamps = generate_video(
-        Path(video_name),
-        actions,
-    )
+    timestamps = generate_video(Path(video_name), actions)
 
     timestamps = [0] + timestamps[:-1]
 
     video_filename = tmp_dir / Path(video_name).with_suffix(".webm")
 
-    synchronize_video_audio(video_filename, audio_filenames, timestamps, remove_first_section=remove_first_section)
+    logger.info(f"Adding audio to video")
+
+    video = synchronize_video_audio(video_filename, audio_filenames, timestamps)
+
+    output_path = video_filename.parent / f"{video_filename.stem}_merged{video_filename.suffix}"
+
+    logger.info(f"Saving video")
+    save_video(video, output_path)
 
     return True
