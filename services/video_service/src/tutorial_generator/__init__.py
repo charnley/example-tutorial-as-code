@@ -7,7 +7,7 @@ from tutorial_generator.speech_funcs import generate_audio
 
 logger = logging.getLogger(__name__)
 
-def synchronize_video_audio(video_filename, audio_filenames, timestamps, remove_first_section=False):
+def synchronize_video_audio(video_filename, audio_filenames, timestamps):
 
     video = VideoFileClip(str(video_filename))
 
@@ -21,15 +21,13 @@ def synchronize_video_audio(video_filename, audio_filenames, timestamps, remove_
     final_audio = CompositeAudioClip(audio_clips)
     final_video = video.with_audio(final_audio)
 
-
     return final_video
 
 
-def trim_video(video, seconds):
-
-    # TODO Trim the first x seconds of the video
-
-    return
+def trim_video(video: VideoFileClip, start_time: float) -> VideoFileClip:
+    """Trim video to start from specified time."""
+    assert start_time < video.duration
+    return video.subclipped(start_time)
 
 
 def save_video(video: VideoFileClip, filename):
@@ -73,9 +71,15 @@ def generate_tutorial(name, voice, actions, texts, remove_first_section=False):
 
     video = synchronize_video_audio(video_filename, audio_filenames, timestamps)
 
-    output_path = video_filename.parent / f"{video_filename.stem}_merged{video_filename.suffix}"
+    if remove_first_section:
+
+        assert len(timestamps) > 1, "what do you want to remove? only 1 section"
+
+        logger.info(f"Trimming video to start at section 2 (timestamp: {timestamps[1]})")
+        video = trim_video(video, timestamps[1])
 
     logger.info(f"Saving video")
+    output_path = video_filename.parent / f"{video_filename.stem}_merged{video_filename.suffix}"
     save_video(video, output_path)
 
     return True

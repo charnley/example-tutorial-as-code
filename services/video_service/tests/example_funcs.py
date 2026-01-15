@@ -38,46 +38,11 @@ def section_view_results(page: Page):
     page.wait_for_timeout(3000)
 
 
-def main2():
+def section_conclusion(page: Page):
 
-    video_name = "how_to_molcalc"
-
-    sections = [
-        ("open_site", section_open_site),
-        ("search_propane", section_search_propane),
-        ("view_results", section_view_results),
-    ]
-
-    times = generate_video(
-        Path(video_name),
-        sections,
-    )
-
-    print(times)
-
-    # TODO Cut off the first loading of the website
-    # TODO Split and add script
+    page.wait_for_timeout(3000)
 
 
-def main2():
-
-    tmp_dir = Path("./tmp_videos")
-
-    section_texts = [
-        "Hi, I'm Amy",
-        "Today we going to get quantum calculations gooooing",
-    ]
-
-    voice = PiperVoice.load("./voices/en_US-amy-medium.onnx")
-
-    for i, text in enumerate(section_texts):
-
-        filename = tmp_dir / f"section_{i}"
-        filename = generate_audio(voice, text, filename)
-
-        logger.info(f"Finished {filename}")
-
-    return
 
 def main():
 
@@ -89,12 +54,14 @@ def main():
         "Hi.",
         "Search for Propane",
         "View the results",
+        "Damn, that looks awesome.",
     ]
 
     section_actions = [
         section_open_site,
         section_search_propane,
         section_view_results,
+        section_conclusion,
     ]
 
     filename = generate_tutorial(video_name, voice, section_actions, section_texts, remove_first_section=True)
