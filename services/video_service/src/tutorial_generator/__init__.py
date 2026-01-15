@@ -11,20 +11,11 @@ def synchronize_video_audio(video_filename, audio_filenames, timestamps, remove_
 
     video = VideoFileClip(str(video_filename))
 
-    # if trim_start > 0:
-    #     video = video.subclip(trim_start)
-
-    trim_start = 0
-
     audio_clips = []
 
     for audio_path, timestamp in zip(audio_filenames, timestamps):
-
         audio = AudioFileClip(str(audio_path))
-        adjusted_start = timestamp - trim_start
-
-        if adjusted_start >= 0:
-            audio_clips.append(audio.with_start(adjusted_start))
+        audio_clips.append(audio.with_start(timestamp))
 
     # Composite audio and apply to video
     final_audio = CompositeAudioClip(audio_clips)
@@ -33,10 +24,8 @@ def synchronize_video_audio(video_filename, audio_filenames, timestamps, remove_
     output_path = video_filename.parent / f"{video_filename.stem}_merged{video_filename.suffix}"
 
     # Use appropriate audio codec based on video format
-    if video_filename.suffix.lower() == '.webm':
-        audio_codec = "libvorbis"
-    else:
-        audio_codec = "aac"
+    is_webm = video_filename.suffix.lower() == '.webm'
+    audio_codec = "libvorbis" if is_webm else "aac"
 
     final_video.write_videofile(str(output_path), audio_codec=audio_codec)
 
