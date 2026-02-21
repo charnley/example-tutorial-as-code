@@ -1,26 +1,16 @@
 <script lang="ts">
-   import * as Command from "$lib/components/ui/command/index.js";
+import * as Command from "$lib/components/ui/command/index.js";
+import { Input } from "$lib/components/ui/input/index.js";
+import { Button } from "$lib/components/ui/button/index.js";
 </script>
 
+<div class="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+  <div class="w-full max-w-sm">
 
-<div class="bg-red-500 text-white p-4">
-  Tailwind test
+      <Input id="thisinput" />
+
+      <Button id="thisbutton">Hello</Button>
+
+  </div>
 </div>
 
-<Command.Root>
- <Command.Input placeholder="Type a command or search..." />
- <Command.List>
-  <Command.Empty>No results found.</Command.Empty>
-  <Command.Group heading="Suggestions">
-   <Command.Item>Calendar</Command.Item>
-   <Command.Item>Search Emoji</Command.Item>
-   <Command.Item>Calculator</Command.Item>
-  </Command.Group>
-  <Command.Separator />
-  <Command.Group heading="Settings">
-   <Command.Item>Profile</Command.Item>
-   <Command.Item>Billing</Command.Item>
-   <Command.Item>Settings</Command.Item>
-  </Command.Group>
- </Command.List>
-</Command.Root>
