@@ -4,6 +4,9 @@ from pathlib import Path
 from moviepy import VideoFileClip, AudioFileClip, CompositeAudioClip
 from tutorial_generator.video_funcs import generate_video
 from tutorial_generator.speech_funcs import generate_audio
+from tutorial_generator.section import SectionList
+
+from .constants import DEFAULT_VIEWPOINT_WIDTH, DEFAULT_VIEWPOINT_HEIGHT
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +41,7 @@ def save_video(video: VideoFileClip, filename):
     video.write_videofile(str(filename), audio_codec=audio_codec)
 
 
-def generate_tutorial(name, voice, actions, texts, remove_first_section=False):
+def generate_tutorial(name, voice, actions, texts, remove_first_section=False, browser_width=DEFAULT_VIEWPOINT_WIDTH, browser_height=DEFAULT_VIEWPOINT_HEIGHT):
 
     logger.info(f"Generating {name} tutorial")
 
@@ -59,9 +62,13 @@ def generate_tutorial(name, voice, actions, texts, remove_first_section=False):
 
         logger.info(f"Finished {filename}")
 
+    # Compute audio durations so generate_video can pause after each section
+    # to prevent narration from overlapping with the next section.
+    audio_durations = [AudioFileClip(str(f)).duration for f in audio_filenames]
+
     logger.info(f"Generating video file")
 
-    timestamps = generate_video(Path(video_name), actions)
+    timestamps = generate_video(Path(video_name), actions, browser_width=browser_width, browser_height=browser_height, audio_durations=audio_durations)
 
     timestamps = [0] + timestamps[:-1]
 

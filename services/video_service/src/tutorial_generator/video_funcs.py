@@ -14,13 +14,18 @@ logger = logging.getLogger(__name__)
 def generate_video(
     video_filename: Path,
     sections: list[Callable[[Page], None]],
-    viewport_width: int = DEFAULT_VIEWPOINT_WIDTH,
-    viewport_height: int = DEFAULT_VIEWPOINT_HEIGHT,
+    browser_width: int = DEFAULT_VIEWPOINT_WIDTH,
+    browser_height: int = DEFAULT_VIEWPOINT_HEIGHT,
     slowmo: int = 100,
     work_dir: Path = Path("tmp_videos/"),
+    audio_durations: list[float] | None = None,
 ):
     """
-    Returns timings based on the video length
+    Returns timings based on the video length.
+
+    If audio_durations is provided, after each section the video recording will
+    pause (via time.sleep) for however long is needed to let the narration
+    finish before the next section begins, preventing audio overlap.
     """
 
     # playwright = async_playwright().__aenter__()
@@ -34,8 +39,8 @@ def generate_video(
 
     context = browser.new_context(
         record_video_dir=work_dir,
-        viewport={"width": viewport_width, "height": viewport_height},
-        record_video_size={"width": viewport_width, "height": viewport_height},
+        viewport={"width": browser_width, "height": browser_height},
+        record_video_size={"width": browser_width, "height": browser_height},
     )
 
     page = context.new_page()
@@ -45,17 +50,26 @@ def generate_video(
 
     start_time = time.time()
 
-    for section_func in sections:
+    for i, section_func in enumerate(sections):
 
         section_start_time = time.time()
 
         section_func(page)
 
         section_end_time = time.time()
-        timings.append(section_end_time - start_time)
 
         duration = section_end_time - section_start_time
         logger.info(f"Section {section_func.__name__} took {duration:.2f} sec")
+
+        # If this section's narration is longer than the browser actions, pause
+        # to let the audio finish before the next section starts.
+        if audio_durations is not None:
+            slack = audio_durations[i] - duration
+            if slack > 0:
+                logger.info(f"Waiting {slack:.2f} sec for audio to finish in section {i}")
+                time.sleep(slack)
+
+        timings.append(time.time() - start_time)
 
     logger.info("Saving video")
 

@@ -21,15 +21,17 @@ browsers:
 
 # Run
 
-dev-svelte:
+tmp_videos:
+	mkdir tmp_videos
+
+start-web-server:
 	make -C ./services/web_application/ dev
 
-record-molcalc:
-	${python} -m playwright codegen https://molcalc.org
+start-playwright-record: tmp_videos
+	${python} ./tutorials/localhost_recording.py
 
-record-dev:
+start-playwright-codegen:
 	${python} -m playwright codegen http://localhost:5173
-
 
 # Admin
 

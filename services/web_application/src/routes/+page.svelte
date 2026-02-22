@@ -5,12 +5,10 @@ import { Button } from "$lib/components/ui/button/index.js";
 </script>
 
 <div class="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-  <div class="w-full max-w-sm">
 
-      <Input id="thisinput" />
+    <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+      Demo website with Svelte 5<br /> and Shadcn-svelte
+    </h1>
 
-      <Button id="thisbutton">Hello</Button>
-
-  </div>
 </div>
 
