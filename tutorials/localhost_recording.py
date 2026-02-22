@@ -53,37 +53,51 @@ def section_calendar2(page: Page):
 
 @sections.add("Or. Another range. Pretty good.")
 def section_calendar3(page: Page):
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(WAIT*4)
     page.get_by_role("button", name="Monday, July 14,").click()
     blur(page)
-    page.wait_for_timeout(800)
+    page.wait_for_timeout(WAIT)
     page.get_by_role("button", name="Friday, July 18,").click()
     blur(page)
     page.wait_for_timeout(WAIT)
 
 @sections.add("So cool.")
 def section_calendar4(page: Page):
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(WAIT*2)
 
 @sections.add("Moving on.")
 def section_login1(page: Page):
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(WAIT)
     page.get_by_role("button", name="Pages").click()
-    page.wait_for_timeout(800)
+    page.wait_for_timeout(WAIT)
     login_button = page.get_by_role("menuitem", name="Login")
     highlight(login_button)
-    page.wait_for_timeout(800)
+    page.wait_for_timeout(WAIT)
     remove_highlight(login_button)
     login_button.click()
 
 @sections.add("Uh, fancy feature here. A login form.")
 def section_login2(page: Page):
-    page.wait_for_timeout(600)
+    page.wait_for_timeout(WAIT)
+
+@sections.add("Filling it out.")
+def section_login3(page: Page):
     page.get_by_role("textbox", name="Email").click()
-    page.wait_for_timeout(600)
-    page.get_by_role("button", name="Login", exact=True).click()
-    page.wait_for_timeout(700)
-    page.get_by_role("textbox", name="Email").click()
+    page.get_by_role("textbox", name="Email").fill("robot@real-email.com")
+    page.get_by_role("link", name="Forgot your password?").press("Tab")
+    page.get_by_role("textbox", name="Email").press("Tab")
+    page.get_by_role("textbox", name="Password").click()
+    page.get_by_role("textbox", name="Password").fill("A real password")
+    # TODO Login successful
+
+@sections.add("Done. Oh. Too fast?")
+def section_login4(page: Page):
+    page.wait_for_timeout(WAIT)
+    page.get_by_role("textbox", name="Email").clear()
+    page.get_by_role("textbox", name="Password").clear()
+
+@sections.add("Okay. Slowly. You fill in email and password, then press login.")
+def section_login2(page: Page):
     page.wait_for_timeout(200)
     element_email = page.get_by_role("textbox", name="Email")
     human_fill(element_email, "human.man@real-email.com")
