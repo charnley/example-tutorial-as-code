@@ -15,15 +15,12 @@ Automate narrated screen-recording tutorials from Python scripts.
 
 ```mermaid
 flowchart TD
-    A["tutorials/localhost_recording.py\n(SectionList of actions + texts)"]
-
-    A --> B["generate_audio()\npiper-tts → .mp3 per section"]
-    A --> C["generate_video()\nPlaywright headless Chromium → .webm\n(pauses after each section\nif audio is longer than the action)"]
-
-    B --> D["synchronize_video_audio()\nmoviepy CompositeAudioClip\naligns each .mp3 to its timestamp"]
-    C --> D
-
-    D --> E["save_video()\nfinal merged .webm"]
+    A[Tutorial script] --> B[Synthesise narration audio]
+    A --> C[Record browser session]
+    C --> C2[Pause if audio is longer than action]
+    B --> D[Synchronise audio to video timestamps]
+    C2 --> D
+    D --> E[Export merged video]
 ```
 
 ### Step by step
