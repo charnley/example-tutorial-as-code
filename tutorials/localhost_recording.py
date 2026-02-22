@@ -97,7 +97,7 @@ def section_login4(page: Page):
     page.get_by_role("textbox", name="Password").clear()
 
 @sections.add("Okay. Slowly. You fill in email and password, then press login.")
-def section_login2(page: Page):
+def section_login5(page: Page):
     page.wait_for_timeout(200)
     element_email = page.get_by_role("textbox", name="Email")
     human_fill(element_email, "human.man@real-email.com")
@@ -115,40 +115,93 @@ def section_login2(page: Page):
     page.get_by_role("button", name="Login", exact=True).click()
     page.wait_for_timeout(WAIT)
 
-@sections.add("I told you. So easy.")
-def section_action4(page: Page):
-    page.wait_for_timeout(1000)
-    page.get_by_role("button", name="Pages").click()
-    page.get_by_role("menuitem", name="Sign Up").click()
-    page.get_by_role("textbox", name="Full Name").click()
-    page.get_by_role("textbox", name="Full Name").fill("Jane Doe")
-    page.get_by_role("textbox", name="Full Name").press("Tab")
-    page.get_by_role("textbox", name="Email").fill("jane.doe@company.com")
-    page.get_by_role("textbox", name="Email").press("Tab")
-    page.get_by_role("textbox", name="Password", exact=True).fill("password")
-    page.get_by_role("textbox", name="Password", exact=True).press("Tab")
-    page.get_by_role("textbox", name="Confirm Password").fill("password")
-    page.get_by_role("textbox", name="Confirm Password").press("Tab")
-    page.get_by_role("button", name="Create Account").click()
+@sections.add("I told you. So easy. Now. Let us sign up for a new account.")
+def section_signup1(page: Page):
+    page.wait_for_timeout(WAIT)
+    button = page.get_by_role("button", name="Pages")
+    highlight(button)
+    page.wait_for_timeout(WAIT)
+    remove_highlight(button)
+    button.click()
+    page.wait_for_timeout(WAIT)
+    signup_button = page.get_by_role("menuitem", name="Sign Up")
+    highlight(signup_button)
+    page.wait_for_timeout(WAIT)
+    signup_button.click()
+    page.wait_for_timeout(WAIT)
 
-@sections.add("I told you. So easy.")
-def section_action5(page: Page):
-    page.wait_for_timeout(1000)
-    page.get_by_role("button", name="Pages").click()
-    page.get_by_role("menuitem", name="Sidebar").click()
+@sections.add("Fill in your details.")
+def section_signup2(page: Page):
+    page.wait_for_timeout(WAIT)
+    element_name = page.get_by_role("textbox", name="Full Name")
+    human_fill(element_name, "Jane Doe")
+    blur(page)
+    page.wait_for_timeout(WAIT)
+    element_email = page.get_by_role("textbox", name="Email")
+    human_fill(element_email, "jane.doe@company.com")
+    blur(page)
+    page.wait_for_timeout(WAIT)
+    element_password = page.get_by_role("textbox", name="Password", exact=True)
+    human_fill(element_password, "password")
+    blur(page)
+    page.wait_for_timeout(WAIT)
+    element_confirm = page.get_by_role("textbox", name="Confirm Password")
+    human_fill(element_confirm, "password")
+    blur(page)
+    page.wait_for_timeout(WAIT)
+
+@sections.add("And hit create account.")
+def section_signup3(page: Page):
+    button = page.get_by_role("button", name="Create Account")
+    highlight(button)
+    page.wait_for_timeout(WAIT)
+    remove_highlight(button)
+    button.click()
+    page.wait_for_timeout(WAIT*2)
+
+@sections.add("Last one. The sidebar. Let us poke around.")
+def section_sidebar1(page: Page):
+    page.wait_for_timeout(WAIT)
+    button = page.get_by_role("button", name="Pages")
+    highlight(button)
+    page.wait_for_timeout(WAIT)
+    remove_highlight(button)
+    button.click()
+    page.wait_for_timeout(WAIT)
+    sidebar_button = page.get_by_role("menuitem", name="Sidebar")
+    highlight(sidebar_button)
+    page.wait_for_timeout(WAIT)
+    sidebar_button.click()
+    page.wait_for_timeout(WAIT)
+
+@sections.add("Drafts. Sent. Junk. Trash.")
+def section_sidebar2(page: Page):
+    page.wait_for_timeout(WAIT)
     page.get_by_role("button", name="Drafts").hover()
+    page.wait_for_timeout(WAIT)
     page.get_by_role("button", name="Sent").hover()
+    page.wait_for_timeout(WAIT)
     page.get_by_role("button", name="Junk").hover()
+    page.wait_for_timeout(WAIT)
     page.get_by_role("button", name="Trash").hover()
-    page.get_by_role("button", name="Drafts").hover()
-    page.get_by_role("button", name="Drafts").click()
+    page.wait_for_timeout(WAIT)
 
-@sections.add("I told you. So easy.")
-def section_action6(page: Page):
-    page.wait_for_timeout(1000)
+@sections.add("Click on drafts.")
+def section_sidebar3(page: Page):
+    button = page.get_by_role("button", name="Drafts")
+    highlight(button)
+    page.wait_for_timeout(WAIT)
+    remove_highlight(button)
+    button.click()
+    page.wait_for_timeout(WAIT*2)
+
+@sections.add("And that is it. Back to home.")
+def section_end(page: Page):
+    page.wait_for_timeout(WAIT)
     page.get_by_role("button", name="Pages").click()
+    page.wait_for_timeout(WAIT)
     page.get_by_role("menuitem", name="Home").click()
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(WAIT*2)
 
 
 def main():
