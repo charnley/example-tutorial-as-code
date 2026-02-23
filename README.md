@@ -3,7 +3,7 @@
 Automate narrated screen-recording tutorials from Python scripts.
 
 - Browser interactions with [Playwright](https://playwright.dev/)
-- Narration by [Piper TTS](https://github.com/rhasspy/piper)
+- Narration by [Piper TTS](https://github.com/OHF-Voice/piper1-gpl)
 
 > [!NOTE]
 > This is **not a package**. It is a working example to show that the approach is viable.

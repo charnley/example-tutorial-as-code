@@ -18,14 +18,23 @@ sections = SectionList()
 def section_open_site(page: Page):
     page.goto(LOCALHOST, timeout=60000)
 
-@sections.add("Aaaaah, too bright.")
+@sections.add("Let us learn how to navigate a simple website. But. Aaaaah! Website is too bright!")
 def section_bright(page: Page):
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(WAIT*4)
 
-@sections.add(". Better. Fuck that was bright. Anyway. Today we are going to demo some features of a cool website.")
+@sections.add(None)
+def section_bright(page: Page):
+    page.wait_for_timeout(WAIT)
+    button = page.get_by_role("button", name="Toggle theme")
+    highlight(button)
+    page.wait_for_timeout(WAIT)
+    button.click()
+    remove_highlight(button)
+    page.wait_for_timeout(WAIT*0.5)
+
+@sections.add("Better. Fuck that was bright. Anyway. Today we are going to demo some features of a website.")
 def section_dark(page: Page):
-    page.get_by_role("button", name="Toggle theme").click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(WAIT*4)
 
 @sections.add("First. Let see how we use the menu to find the calendar")
 def section_calendar1(page: Page):
@@ -51,7 +60,7 @@ def section_calendar2(page: Page):
     page.get_by_role("button", name="Friday, June 13,").click()
     blur(page)
 
-@sections.add("Or. Another range. Pretty good.")
+# @sections.add("Or. Another range. Pretty good.")
 def section_calendar3(page: Page):
     page.wait_for_timeout(WAIT*4)
     page.get_by_role("button", name="Monday, July 14,").click()
@@ -65,58 +74,9 @@ def section_calendar3(page: Page):
 def section_calendar4(page: Page):
     page.wait_for_timeout(WAIT*2)
 
-@sections.add("Moving on.")
-def section_login1(page: Page):
-    page.wait_for_timeout(WAIT)
-    page.get_by_role("button", name="Pages").click()
-    page.wait_for_timeout(WAIT)
-    login_button = page.get_by_role("menuitem", name="Login")
-    highlight(login_button)
-    page.wait_for_timeout(WAIT)
-    remove_highlight(login_button)
-    login_button.click()
 
-@sections.add("Uh, fancy feature here. A login form.")
-def section_login2(page: Page):
-    page.wait_for_timeout(WAIT)
-
-@sections.add("Filling it out.")
-def section_login3(page: Page):
-    page.get_by_role("textbox", name="Email").click()
-    page.get_by_role("textbox", name="Email").fill("robot@real-email.com")
-    page.get_by_role("link", name="Forgot your password?").press("Tab")
-    page.get_by_role("textbox", name="Email").press("Tab")
-    page.get_by_role("textbox", name="Password").click()
-    page.get_by_role("textbox", name="Password").fill("A real password")
-    # TODO Login successful
-
-@sections.add("Done. Oh. Too fast?")
-def section_login4(page: Page):
-    page.wait_for_timeout(WAIT)
-    page.get_by_role("textbox", name="Email").clear()
-    page.get_by_role("textbox", name="Password").clear()
-
-@sections.add("Okay. Slowly. You fill in email and password, then press login.")
-def section_login5(page: Page):
-    page.wait_for_timeout(200)
-    element_email = page.get_by_role("textbox", name="Email")
-    human_fill(element_email, "human.man@real-email.com")
-    page.wait_for_timeout(WAIT)
-
-    page.get_by_role("textbox", name="Email").press("Tab")
-    page.wait_for_timeout(WAIT)
-    page.get_by_role("link", name="Forgot your password?").press("Tab")
-    page.wait_for_timeout(WAIT)
-
-    element_password = page.get_by_role("textbox", name="Password")
-    human_fill(element_password, "notARealPassword")
-    page.wait_for_timeout(WAIT)
-
-    page.get_by_role("button", name="Login", exact=True).click()
-    page.wait_for_timeout(WAIT)
-
-@sections.add("I told you. So easy. Now. Let us sign up for a new account.")
-def section_signup1(page: Page):
+@sections.add("Now. Let us sign up for an account.")
+def section_signup_nav(page: Page):
     page.wait_for_timeout(WAIT)
     button = page.get_by_role("button", name="Pages")
     highlight(button)
@@ -130,36 +90,71 @@ def section_signup1(page: Page):
     signup_button.click()
     page.wait_for_timeout(WAIT)
 
-@sections.add("Fill in your details.")
-def section_signup2(page: Page):
+@sections.add("Just fill and press create")
+def section_signup_fast(page: Page):
     page.wait_for_timeout(WAIT)
-    element_name = page.get_by_role("textbox", name="Full Name")
-    human_fill(element_name, "Jane Doe")
-    blur(page)
+    page.get_by_role("textbox", name="Full Name").fill("Jane Doe")
+    page.get_by_role("textbox", name="Email").fill("jane.doe@company.com")
+    page.get_by_role("textbox", name="Password", exact=True).fill("password")
+    page.get_by_role("textbox", name="Confirm Password").fill("password")
+    page.get_by_role("button", name="Create Account").click()
     page.wait_for_timeout(WAIT)
-    element_email = page.get_by_role("textbox", name="Email")
-    human_fill(element_email, "jane.doe@company.com")
-    blur(page)
+
+@sections.add("What")
+def section_signup_too_fast(page: Page):
+    page.wait_for_timeout(WAIT*2)
+
+@sections.add("Was it too fast?")
+def section_signup_too_fast(page: Page):
+    page.wait_for_timeout(WAIT*3)
+    page.get_by_role("button", name="Continue").click()
     page.wait_for_timeout(WAIT)
-    element_password = page.get_by_role("textbox", name="Password", exact=True)
-    human_fill(element_password, "password")
-    blur(page)
+
+@sections.add("Okay.")
+def section_signup_redo_nav(page: Page):
+    page.wait_for_timeout(WAIT*1.5)
+
+@sections.add("Let me redo it.")
+def section_signup_redo_nav(page: Page):
     page.wait_for_timeout(WAIT)
-    element_confirm = page.get_by_role("textbox", name="Confirm Password")
-    human_fill(element_confirm, "password")
+    page.reload()
+    page.wait_for_timeout(WAIT)
+
+@sections.add("First. Full name.")
+def section_signup_slow_name(page: Page):
+    page.wait_for_timeout(WAIT)
+    human_fill(page.get_by_role("textbox", name="Full Name"), "Jane Doe")
     blur(page)
     page.wait_for_timeout(WAIT)
 
-@sections.add("And hit create account.")
-def section_signup3(page: Page):
+@sections.add("Email.")
+def section_signup_slow_email(page: Page):
+    human_fill(page.get_by_role("textbox", name="Email"), "jane.doe@company.com")
+    blur(page)
+    page.wait_for_timeout(WAIT)
+
+@sections.add("Password.")
+def section_signup_slow_password(page: Page):
+    human_fill(page.get_by_role("textbox", name="Password", exact=True), "password")
+    blur(page)
+    page.wait_for_timeout(WAIT)
+    human_fill(page.get_by_role("textbox", name="Confirm Password"), "password")
+    blur(page)
+    page.wait_for_timeout(WAIT)
+
+@sections.add("Then. Create account.")
+def section_signup_slow_submit(page: Page):
     button = page.get_by_role("button", name="Create Account")
+    button.scroll_into_view_if_needed()
     highlight(button)
     page.wait_for_timeout(WAIT)
     remove_highlight(button)
     button.click()
     page.wait_for_timeout(WAIT*2)
+    page.get_by_role("button", name="Continue").click()
+    page.wait_for_timeout(WAIT)
 
-@sections.add("Last one. The sidebar. Let us poke around.")
+@sections.add("Now let us navigate a email interface")
 def section_sidebar1(page: Page):
     page.wait_for_timeout(WAIT)
     button = page.get_by_role("button", name="Pages")
@@ -174,35 +169,62 @@ def section_sidebar1(page: Page):
     sidebar_button.click()
     page.wait_for_timeout(WAIT)
 
-@sections.add("Drafts. Sent. Junk. Trash.")
+@sections.add("Notice the hover effects")
 def section_sidebar2(page: Page):
     page.wait_for_timeout(WAIT)
+
+@sections.add(None)
+def section_sidebar3(page: Page):
+    page.wait_for_timeout(WAIT)
+
+@sections.add("Drafts")
+def section_sidebar4(page: Page):
     page.get_by_role("button", name="Drafts").hover()
     page.wait_for_timeout(WAIT)
+    page.get_by_role("button", name="Drafts").click()
+    page.wait_for_timeout(WAIT*2.5)
+
+@sections.add("Sent")
+def section_sidebar6(page: Page):
     page.get_by_role("button", name="Sent").hover()
     page.wait_for_timeout(WAIT)
+    page.get_by_role("button", name="Sent").click()
+    page.wait_for_timeout(WAIT*2.5)
+
+@sections.add("Junk")
+def section_sidebar7(page: Page):
     page.get_by_role("button", name="Junk").hover()
     page.wait_for_timeout(WAIT)
-    page.get_by_role("button", name="Trash").hover()
-    page.wait_for_timeout(WAIT)
-
-@sections.add("Click on drafts.")
-def section_sidebar3(page: Page):
-    button = page.get_by_role("button", name="Drafts")
-    highlight(button)
-    page.wait_for_timeout(WAIT)
-    remove_highlight(button)
-    button.click()
+    page.get_by_role("button", name="Junk").click()
     page.wait_for_timeout(WAIT*2)
 
-@sections.add("And that is it. Back to home.")
-def section_end(page: Page):
+@sections.add("Wait.")
+def section_sidebar8(page: Page):
+    page.wait_for_timeout(WAIT)
+
+@sections.add("There is an email from you. I really should reply.")
+def section_sidebar8(page: Page):
+    page.wait_for_timeout(WAIT)
+
+@sections.add(None)
+def section_sidebar8(page: Page):
+    page.wait_for_timeout(WAIT)
+
+@sections.add("But not now.")
+def section_sidebar8(page: Page):
+    page.wait_for_timeout(WAIT)
+
+@sections.add("Let us navigate back to home")
+def section_end1(page: Page):
     page.wait_for_timeout(WAIT)
     page.get_by_role("button", name="Pages").click()
     page.wait_for_timeout(WAIT)
     page.get_by_role("menuitem", name="Home").click()
     page.wait_for_timeout(WAIT*2)
 
+@sections.add("Thanks for watching this tutorial")
+def section_end2(page: Page):
+    pass
 
 def main():
 

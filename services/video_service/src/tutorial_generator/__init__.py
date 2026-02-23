@@ -56,6 +56,11 @@ def generate_tutorial(name, voice, actions, texts, remove_first_section=False, b
 
     for i, text in enumerate(texts):
 
+        if text is None:
+            audio_filenames.append(None)
+            logger.info(f"Section {i} has no audio, skipping")
+            continue
+
         filename = tmp_dir / f"section_{i}"
         filename = generate_audio(voice, text, filename)
         audio_filenames.append(filename)
@@ -64,7 +69,11 @@ def generate_tutorial(name, voice, actions, texts, remove_first_section=False, b
 
     # Compute audio durations so generate_video can pause after each section
     # to prevent narration from overlapping with the next section.
-    audio_durations = [AudioFileClip(str(f)).duration for f in audio_filenames]
+    # Sections with no audio (None) get duration 0.
+    audio_durations = [
+        AudioFileClip(str(f)).duration if f is not None else 0.0
+        for f in audio_filenames
+    ]
 
     logger.info(f"Generating video file")
 
@@ -76,7 +85,13 @@ def generate_tutorial(name, voice, actions, texts, remove_first_section=False, b
 
     logger.info(f"Adding audio to video")
 
-    video = synchronize_video_audio(video_filename, audio_filenames, timestamps)
+    # Only pass sections that actually have audio to synchronize_video_audio
+    audio_pairs = [(f, t) for f, t in zip(audio_filenames, timestamps) if f is not None]
+    if audio_pairs:
+        active_filenames, active_timestamps = zip(*audio_pairs)
+        video = synchronize_video_audio(video_filename, active_filenames, active_timestamps)
+    else:
+        video = VideoFileClip(str(video_filename))
 
     if remove_first_section:
 

@@ -28,8 +28,6 @@ def generate_video(
     finish before the next section begins, preventing audio overlap.
     """
 
-    # playwright = async_playwright().__aenter__()
-
     playwright = sync_playwright().start()
 
     browser = playwright.chromium.launch(

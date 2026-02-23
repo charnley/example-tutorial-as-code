@@ -22,8 +22,9 @@ class SectionList:
     def __init__(self):
         self._sections: list[tuple[Callable, str]] = []
 
-    def add(self, text: str) -> Callable:
-        """Decorator that registers a page-action function with its narration text."""
+    def add(self, text: str | None) -> Callable:
+        """Decorator that registers a page-action function with its narration text.
+        Pass None to record the section with no narration audio."""
         def decorator(func: Callable) -> Callable:
             self._sections.append((func, text))
             return func
