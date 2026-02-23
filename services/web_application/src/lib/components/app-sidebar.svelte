@@ -46,11 +46,20 @@
 		],
 		mails: [
 			{
+				name: "You",
+				email: "you@example.com",
+				subject: "I really need help",
+				date: "07:34 AM",
+				teaser: "I really need your help! Please reply!",
+				tags: ["Junk"],
+			},
+			{
 				name: "William Smith",
 				email: "williamsmith@example.com",
 				subject: "Meeting Tomorrow",
 				date: "09:34 AM",
 				teaser: "Hi team, just a reminder about our meeting tomorrow at 10 AM.\nPlease come prepared with your project updates.",
+				tags: ["Inbox"],
 			},
 			{
 				name: "Alice Smith",
@@ -58,6 +67,7 @@
 				subject: "Re: Project Update",
 				date: "Yesterday",
 				teaser: "Thanks for the update. The progress looks great so far.\nLet's schedule a call to discuss the next steps.",
+				tags: ["Inbox", "Sent"],
 			},
 			{
 				name: "Bob Johnson",
@@ -65,6 +75,7 @@
 				subject: "Weekend Plans",
 				date: "2 days ago",
 				teaser: "Hey everyone! I'm thinking of organizing a team outing this weekend.\nWould you be interested in a hiking trip or a beach day?",
+				tags: ["Inbox"],
 			},
 			{
 				name: "Emily Davis",
@@ -72,6 +83,7 @@
 				subject: "Re: Question about Budget",
 				date: "2 days ago",
 				teaser: "I've reviewed the budget numbers you sent over.\nCan we set up a quick call to discuss some potential adjustments?",
+				tags: ["Inbox"],
 			},
 			{
 				name: "Michael Wilson",
@@ -79,6 +91,7 @@
 				subject: "Important Announcement",
 				date: "1 week ago",
 				teaser: "Please join us for an all-hands meeting this Friday at 3 PM.\nWe have some exciting news to share about the company's future.",
+				tags: ["Inbox"],
 			},
 			{
 				name: "Sarah Brown",
@@ -86,6 +99,7 @@
 				subject: "Re: Feedback on Proposal",
 				date: "1 week ago",
 				teaser: "Thank you for sending over the proposal. I've reviewed it and have some thoughts.\nCould we schedule a meeting to discuss my feedback in detail?",
+				tags: ["Drafts"],
 			},
 			{
 				name: "David Lee",
@@ -93,6 +107,7 @@
 				subject: "New Project Idea",
 				date: "1 week ago",
 				teaser: "I've been brainstorming and came up with an interesting project concept.\nDo you have time this week to discuss its potential impact and feasibility?",
+				tags: ["Drafts", "Sent"],
 			},
 			{
 				name: "Olivia Wilson",
@@ -100,6 +115,7 @@
 				subject: "Vacation Plans",
 				date: "1 week ago",
 				teaser: "Just a heads up that I'll be taking a two-week vacation next month.\nI'll make sure all my projects are up to date before I leave.",
+				tags: ["Sent"],
 			},
 			{
 				name: "James Martin",
@@ -107,6 +123,7 @@
 				subject: "Re: Conference Registration",
 				date: "1 week ago",
 				teaser: "I've completed the registration for the upcoming tech conference.\nLet me know if you need any additional information from my end.",
+				tags: ["Junk"],
 			},
 			{
 				name: "Sophia White",
@@ -114,6 +131,7 @@
 				subject: "Team Dinner",
 				date: "1 week ago",
 				teaser: "To celebrate our recent project success, I'd like to organize a team dinner.\nAre you available next Friday evening? Please let me know your preferences.",
+				tags: ["Trash"],
 			},
 		],
 	};
@@ -129,7 +147,7 @@
 	let { ref = $bindable(null), ...restProps } = $props();
 
 	let activeItem = $state(data.navMain[0]);
-	let mails = $state(data.mails);
+	let mails = $state(data.mails.filter(mail => mail.tags.includes("Inbox")));
 	const sidebar = useSidebar();
 </script>
 
@@ -176,11 +194,7 @@
 									}}
 									onclick={() => {
 										activeItem = item;
-										const mail = data.mails.sort(() => Math.random() - 0.5);
-										mails = mail.slice(
-											0,
-											Math.max(5, Math.floor(Math.random() * 10) + 1)
-										);
+										mails = data.mails.filter(mail => mail.tags.includes(item.title));
 										sidebar.setOpen(true);
 									}}
 									isActive={activeItem.title === item.title}

@@ -8,8 +8,10 @@
 		FieldLabel,
 		FieldDescription,
 	} from "$lib/components/ui/field/index.js";
+	import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
 
 	const id = $props.id();
+	let successOpen = $state(false);
 </script>
 
 <Card.Root class="mx-auto w-full max-w-sm">
@@ -18,7 +20,7 @@
 		<Card.Description>Enter your email below to login to your account</Card.Description>
 	</Card.Header>
 	<Card.Content>
-		<form>
+		<form onsubmit={(e) => { e.preventDefault(); successOpen = true; }}>
 			<FieldGroup>
 				<Field>
 					<FieldLabel for="email-{id}">Email</FieldLabel>
@@ -52,3 +54,15 @@
 		</form>
 	</Card.Content>
 </Card.Root>
+
+<AlertDialog.Root bind:open={successOpen}>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>Login successful!</AlertDialog.Title>
+			<AlertDialog.Description>You have been logged in successfully.</AlertDialog.Description>
+		</AlertDialog.Header>
+		<AlertDialog.Footer>
+			<AlertDialog.Action onclick={() => (successOpen = false)}>Continue</AlertDialog.Action>
+		</AlertDialog.Footer>
+	</AlertDialog.Content>
+</AlertDialog.Root>

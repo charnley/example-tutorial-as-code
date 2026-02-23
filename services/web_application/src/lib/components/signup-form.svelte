@@ -3,7 +3,9 @@
 	import * as Card from "$lib/components/ui/card/index.js";
 	import * as Field from "$lib/components/ui/field/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
+	import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
 	let { ...restProps } = $props();
+	let successOpen = $state(false);
 </script>
 
 <Card.Root {...restProps}>
@@ -12,7 +14,7 @@
 		<Card.Description>Enter your information below to create your account</Card.Description>
 	</Card.Header>
 	<Card.Content>
-		<form>
+		<form onsubmit={(e) => { e.preventDefault(); successOpen = true; }}>
 			<Field.Group>
 				<Field.Field>
 					<Field.Label for="name">Full Name</Field.Label>
@@ -49,3 +51,15 @@
 		</form>
 	</Card.Content>
 </Card.Root>
+
+<AlertDialog.Root bind:open={successOpen}>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>Account created!</AlertDialog.Title>
+			<AlertDialog.Description>Your account has been created successfully.</AlertDialog.Description>
+		</AlertDialog.Header>
+		<AlertDialog.Footer>
+			<AlertDialog.Action onclick={() => (successOpen = false)}>Continue</AlertDialog.Action>
+		</AlertDialog.Footer>
+	</AlertDialog.Content>
+</AlertDialog.Root>
