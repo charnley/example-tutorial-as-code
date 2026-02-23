@@ -196,7 +196,7 @@ def section_sidebar7(page: Page):
     page.get_by_role("button", name="Junk").hover()
     page.wait_for_timeout(WAIT)
     page.get_by_role("button", name="Junk").click()
-    page.wait_for_timeout(WAIT*2)
+    page.wait_for_timeout(WAIT*3)
 
 @sections.add("Wait.")
 def section_sidebar8(page: Page):
@@ -222,8 +222,12 @@ def section_end1(page: Page):
     page.get_by_role("menuitem", name="Home").click()
     page.wait_for_timeout(WAIT*2)
 
-@sections.add("Thanks for watching this tutorial")
+@sections.add(None)
 def section_end2(page: Page):
+    page.wait_for_timeout(WAIT)
+
+@sections.add("Thanks for watching this tutorial")
+def section_end3(page: Page):
     pass
 
 def main():
