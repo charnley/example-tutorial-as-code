@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Callable
 
 import playwright
-# from playwright.async_api import Page, async_playwright
 from playwright.sync_api import sync_playwright, Page
 from tutorial_generator.constants import DEFAULT_VIEWPOINT_HEIGHT, DEFAULT_VIEWPOINT_WIDTH
 
