@@ -1,3 +1,7 @@
-playwright
+moviepy>2
+pip
 piper-tts
+playwright
+pre-commit
 pydantic
+pydub

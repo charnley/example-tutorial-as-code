@@ -19,19 +19,24 @@ browsers:
 	mkdir browsers
 	${python} -m playwright install
 
-example:
-	${python} ./services/video_service/src/example.py
-
 # Run
 
-dev-svelte:
+tmp_videos:
+	mkdir tmp_videos
+
+start-web-server:
 	make -C ./services/web_application/ dev
 
-record:
+start-playwright-record: tmp_videos
+	${python} ./tutorials/localhost_recording.py
+
+start-playwright-codegen:
 	${python} -m playwright codegen http://localhost:5173
 
-
 # Admin
+
+format:
+	${python} -m pre_commit run --all-files
 
 clean:
 	rm videos/*.webm

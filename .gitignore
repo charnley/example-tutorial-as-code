@@ -5,6 +5,10 @@ browsers
 test-results
 node_modules
 
+# output
+*.webm
+*.mp3
+
 # Output
 .output
 .vercel
@@ -26,3 +30,51 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# dev
+.vim
+env
+*.sqlite3
+*.ipynb_checkpoints
+
+*.py[cod]
+
+# Test coverage
+htmlcov
+*,cover
+
+# setup.py output
+files.txt
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib64
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
