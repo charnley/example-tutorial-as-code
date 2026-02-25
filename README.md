@@ -1,4 +1,6 @@
-# Playwright Tutorial Generator
+# Example of Tutorial as Code (Proof-of-concept)
+
+Write up: [https://charnley.github.io/blog/2026/02/24/automated-tutorial-as-code-playwright-piper.html](https://charnley.github.io/blog/2026/02/24/automated-tutorial-as-code-playwright-piper.html)
 
 Automate narrated screen-recording tutorials from Python scripts.
 
@@ -7,7 +9,7 @@ Automate narrated screen-recording tutorials from Python scripts.
 
 > [!NOTE]
 > This is **not a package**. It is a working example to show that the approach is viable.
-> Copy, adapt, and build on it as you see fit.
+> Copy, adapt, and build on it as you see fit. It will not be maintained.
 
 ---
 
